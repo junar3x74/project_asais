@@ -23,6 +23,7 @@ composer install
 composer update
 
 project update:
+just setting up some folders and some files
 at the moment connect it database pero waray pait solod
 
 Requirements
