@@ -1,30 +1,45 @@
-Emman or Budi read this 
+# Project Name
+project_asais
 
-kon mayda niyo xampp
+## Description
+Emman or Budi, please read this:
 
-didto kam it hdtocs folder ig botang kon ma download it yadi nga repository
+1. **Kon mayda niyo XAMPP:**
+   - Didto kam it **htdocs** folder, ig-botang an **repository** nga gin download niyo.
 
-install laanay composer para kanan .env file:
-link https://getcomposer.org/download/
+2. **Install Composer para kanan .env file:**
+   - Download Composer here: [https://getcomposer.org/download/](https://getcomposer.org/download/).
 
-in windows commands
-checking composer version:
-composer --version or composer -v
+3. **Windows Commands:**
+   - To check Composer version:
+     ```bash
+     composer --version
+     ```
+     or
+     ```bash
+     composer -v
+     ```
 
-to set up composer on the project
-following commands 
-"WARNING DONT DO THE COMPOSER COMMANDS IN THE DEFAULT PATH IT KANAN WINDOWS" 
-didto pag command it project path for the composer set up 
-like this C:\xampp\htdocs\project_asais>
+4. **To set up Composer on the project:**
+   - **WARNING: DON'T DO THE COMPOSER COMMANDS IN THE DEFAULT PATH IT KANAN WINDOWS!**
+   - Didto pag-command it project path for the Composer setup, like this:
+     ```bash
+     C:\xampp\htdocs\project_asais>
+     ```
 
-so the commands are:composer install composer update
+   - Then run the following commands:
+     ```bash
+     composer install
+     composer update
+     ```
 
-project update:
-just setting up some folders and some files
-at the moment connect it database pero waray pait solod
+5. **Project Update:**
+   - Just setting up some folders and files at the moment. 
+   - Connect it to the database, but waray pait solod (not yet finished).
 
-Requirements
-PHP >= 7.4
-Composer
-MySQL
-A local or online server (e.g., XAMPP, WAMP, or Laravel Valet)
+## Requirements
+- PHP >= 7.4
+- Composer
+- MySQL
+- A local or online server (e.g., XAMPP, WAMP, or Laravel Valet)
+
