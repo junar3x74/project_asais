@@ -17,10 +17,7 @@ following commands
 didto pag command it project path for the composer set up 
 like this C:\xampp\htdocs\project_asais>
 
-so the commands are:
-composer install
-
-composer update
+so the commands are:composer install composer update
 
 project update:
 just setting up some folders and some files
