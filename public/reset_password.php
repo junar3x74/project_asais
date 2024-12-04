@@ -3,20 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
     <title>Reset Password</title>
-    <link rel="stylesheet" href="css/">
 </head>
 <body>
-    <form method="POST">
+    <div class="container">
         <h2>Reset Password</h2>
-        <label for="otp">Enter OTP:</label>
-        <input type="text" id="otp" name="otp" required>
-        <label for="new_password">New Password:</label>
-        <input type="password" id="new_password" name="new_password" required>
-        <label for="confirm_password">Confirm Password:</label>
-        <input type="password" id="confirm_password" name="confirm_password" required>
-        <button type="submit">Reset Password</button>
-    </form>
-    <script src=""></script>
+        <form class="form" id="form" method="POST">
+            <div class="form-group">
+                <label for="otp">Enter OTP</label>
+                <input type="text" name="otp" id="otp" placeholder="Enter OTP" required>
+            </div>
+            <div class="form-group">
+                <label for="new_password">New Password</label>
+                <input type="password" name="new_password" id="new_password" placeholder="Enter new password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm new password" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Reset Password</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
