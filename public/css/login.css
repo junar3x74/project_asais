@@ -1,0 +1,17 @@
+body{
+    color: rgb(10, 14, 12);
+    background-color: aquamarine;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    place-items: center;
+    align-items: center;
+    padding: 20px;
+    margin: 20px;
+    background-color: rgb(218, 28, 28);
+
+
+}
+

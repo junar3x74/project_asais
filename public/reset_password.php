@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password</title>
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="css/">
 </head>
 <body>
     <form method="POST">
         <h2>Reset Password</h2>
-        <?php if (isset($error)) echo "<p class='error'>$error</p>"; ?>
         <label for="otp">Enter OTP:</label>
         <input type="text" id="otp" name="otp" required>
         <label for="new_password">New Password:</label>

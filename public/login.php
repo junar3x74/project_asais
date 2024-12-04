@@ -1,26 +1,31 @@
-<?php
-
-
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-    <form method="POST">
-        <h2>Login</h2>
-        <?php if (isset($error)) echo "<p class='error'>$error</p>"; ?>
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Login</button>
-        <p><a href="forgot_password.php">Forgot Password?</a></p>
-        <p><a href="registration.php">sign up?</a></p>
-
+    <div class="container">
+        <form class="form" id="form" method="POST">
+            <h2 id="login-header">Login</h2>            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>           
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>           
+            <div class="form-group">
+                <button type="submit">Login</button>
+            </div>            
+            <div class="form-group">
+                <p><a href="forgot_password.php">Forgot Password?</a></p>
+                <p><a href="registration.php">Sign up?</a></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
