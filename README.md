@@ -37,6 +37,7 @@ Emman or Budi, please read this:
    - Just setting up some folders and files at the moment.
    - mga kanan login,registration pages laanay 
    - Connect it to the database, but waray pait solod (not yet finished).
+   - adding some designs
 
 ## Requirements
 - PHP >= 7.4
