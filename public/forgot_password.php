@@ -1,10 +1,11 @@
 <?php
 require_once __DIR__ . '/../configs/db.php'; // Database connection
-require_once __DIR__ . '/../vendor/autoload.php'; // PHPMailer
+require_once __DIR__ . '/../vendor/autoload.php'; // PHPMailer and Carbon
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Dotenv\Dotenv;
+use Carbon\Carbon;
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../'); // Adjust path if needed
 $dotenv->load();
@@ -20,13 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->fetch();
 
     if ($user) {
-        // Generate a 6-digit OTP and its expiry in UTC
+        // Generate a 6-digit OTP and its expiry in Philippine Time
         $otp = random_int(100000, 999999);
-        $otp_expiry = new DateTime('now', new DateTimeZone('UTC')); // Current time in UTC
-        $otp_expiry->modify('+10 minutes'); // Set expiry to 10 minutes from now
-        $otp_expiry = $otp_expiry->format('Y-m-d H:i:s'); // Format for database
+        $otp_expiry = Carbon::now('Asia/Manila')->addMinutes(10); // Current time in Philippine Time + 10 minutes
+        $otp_expiry = $otp_expiry->format('Y-m-d H:i:s'); // Format for database (MySQL)
 
-        // Save the OTP and expiry in the database
+        // Save the OTP and expiry in the database (store in Philippine time)
         $updateStmt = $pdo->prepare("UPDATE users SET otp = :otp, otp_expiry = :otp_expiry WHERE email = :email");
         $updateStmt->execute([
             'otp' => $otp,
@@ -65,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
