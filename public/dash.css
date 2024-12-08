@@ -1,0 +1,130 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+  }
+  
+  /* Navbar Styles */
+  .navbar {
+    background-color: #333;
+    color: white;
+    padding: 14px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100; /* Ensure navbar stays on top */
+  }
+  
+  .navbar .profile {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar .username, .navbar .role {
+    font-size: 16px;
+  }
+  
+  .navbar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .navbar li {
+    flex: 1;
+  }
+  
+  .navbar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .navbar a:hover {
+    background-color: #575757;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+    background-color: #333;
+    color: white;
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 60px; /* Added space for the navbar */
+    left: 0;
+    padding-top: 40px; /* Adjusted space for profile */
+    text-align: center;
+    z-index: 50; /* Ensure sidebar stays below navbar */
+  }
+  
+  .sidebar .profile {
+    margin-bottom: 40px;
+  }
+  
+  .sidebar .username {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  
+  .sidebar .role {
+    font-size: 22px;
+    font-weight: bold;
+    color: #ffcc00;
+    text-transform: uppercase;
+    margin-top: 5px;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar li {
+    margin: 20px 0;
+  }
+  
+  .sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px 20px;
+  }
+  
+  .sidebar a:hover {
+    background-color: #575757;
+  }
+  
+  /* Content Styling */
+  .content {
+    margin-left: 250px; /* Space for the sidebar */
+    margin-top: 100px; /* Space for both the navbar and sidebar */
+    padding: 20px;
+  }
+  
+  /* Logout Link in Navbar Styling */
+  .navbar .logout {
+    background-color: #d9534f;
+    color: white;
+  }
+  
+  .navbar .logout:hover {
+    background-color: #c9302c;
+  }
+  
