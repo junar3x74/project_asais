@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__ . '/../configs/db.php'; // Database connection
 require_once __DIR__ . '/../vendor/autoload.php'; // PHPMailer
 
@@ -21,9 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->fetch();
 
     if ($user) {
-        // Generate a 6-digit OTP and its expiry
+        // Generate a 6-digit OTP and its expiry in UTC
         $otp = random_int(100000, 999999);
-        $otp_expiry = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+        $otp_expiry = new DateTime('now', new DateTimeZone('UTC')); // Current time in UTC
+        $otp_expiry->modify('+10 minutes'); // Set expiry to 10 minutes from now
+        $otp_expiry = $otp_expiry->format('Y-m-d H:i:s'); // Format for database
 
         // Save the OTP and expiry in the database
         $updateStmt = $pdo->prepare("UPDATE users SET otp = :otp, otp_expiry = :otp_expiry WHERE email = :email");
@@ -54,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $mail->send();
             $_SESSION['success'] = "An OTP has been sent to your email.";
-            header('Location: reset_password.php');
+            header('Location: reset_password.php'); // Redirect to reset password page
             exit();
         } catch (Exception $e) {
             $_SESSION['error'] = "Failed to send OTP email. Error: {$mail->ErrorInfo}";
@@ -63,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['error'] = "No account found with this email.";
     }
 }
-
 ?>
 
 
