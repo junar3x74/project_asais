@@ -57,3 +57,59 @@
     </div>
 </body>
 </html>
+
+<?php
+    
+     require_once __DIR__ . '/../configs/db.php';
+
+    
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Capture form data
+        $name = trim($_POST['name']);
+        $email = trim($_POST['email']);
+        $password = $_POST['password'];
+        $cpassword = $_POST['cpassword'];
+        $role = $_POST['role'];
+    
+        // Validate form inputs
+        if (empty($name) || empty($email) || empty($password) || empty($cpassword)) {
+            die("All fields are required.");
+        }
+    
+        if ($password !== $cpassword) {
+            die("Passwords do not match.");
+        }
+    
+        // Check if email is already registered
+        $check_sql = "SELECT * FROM users WHERE email = :email";
+        $stmt = $pdo->prepare($check_sql);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+    
+        if ($stmt->rowCount() > 0) {
+            die("This email is already registered.");
+        }
+    
+        // Hash the password
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    
+        // Insert the user into the database
+        $insert_sql = "INSERT INTO users (username, email, password, role) VALUES (:username, :email, :password, :role)";
+        $stmt = $pdo->prepare($insert_sql);
+        $stmt->bindParam(':username', $name);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':password', $hashed_password);
+        $stmt->bindParam(':role', $role);
+    
+        if ($stmt->execute()) {
+            echo "Registration successful!";
+            header("Location: login.php"); // Redirect to login page
+            exit;
+        } else {
+            die("Error during registration.");
+        }
+    }
+    
+    
+
+?>
