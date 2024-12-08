@@ -1,20 +1,20 @@
 <?php
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php'; // For .env file
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+use Dotenv\Dotenv;
+
+// Load .env file
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-$host = $_ENV['DB_HOST'];
-$db = $_ENV['DB_DATABASE'];
-$user = $_ENV['DB_USERNAME'];
-$password = $_ENV['DB_PASSWORD'];
-
+// Create a PDO instance
 try {
-    $conn = new mysqli($host, $user, $password, $db);
-    if ($conn->connect_error) {
-        throw new Exception("Database connection failed: " . $conn->connect_error);
-    }
-} catch (Exception $e) {
-    die($e->getMessage());
+    $pdo = new PDO(
+        "mysql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_DATABASE'],
+        $_ENV['DB_USERNAME'],
+        $_ENV['DB_PASSWORD']
+    );
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
 }
-?>

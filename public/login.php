@@ -1,5 +1,60 @@
 <?php
+// Start output buffering
+ob_start();
 
+require_once __DIR__ . '/../configs/db.php'; // Include the database connection
+
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Capture form data
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+
+    // Validate form inputs
+    if (empty($email) || empty($password)) {
+        die("Please enter both email and password.");
+    }
+
+    // Check if the user exists in the database
+    $check_user_sql = "SELECT * FROM users WHERE email = :email";
+    $stmt = $pdo->prepare($check_user_sql);
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+
+    // If the user is found
+    if ($stmt->rowCount() > 0) {
+        // Fetch user data
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Verify password
+        if (password_verify($password, $user['password'])) {
+            // Start the session and store user data
+            session_start();
+            $_SESSION['user_id'] = $user['id'];  // Assuming 'id' is the unique identifier
+            $_SESSION['user_name'] = $user['fname'];  // Store username (or fullname)
+            $_SESSION['role'] = $user['role'];  // Store role (student/teacher)
+
+            // Role-based redirection
+            if ($user['role'] == 'teacher') {
+                // Redirect to teacher's dashboard
+                header("Location: teacher_dashboard.php");
+            } else {
+                // Redirect to student's dashboard
+                header("Location: student_dashboard.php");
+            }
+            exit;
+        } else {
+            // Invalid password
+            die("Incorrect password.");
+        }
+    } else {
+        // User not found
+        die("No user found with this email.");
+    }
+}
+
+// End output buffering
+ob_end_flush();
 ?>
 
 <!DOCTYPE html>
