@@ -2,7 +2,11 @@
 // Start output buffering
 ob_start();
 
-require_once __DIR__ . '/../configs/db.php'; // Include the database connection
+// Include the database connection
+require_once __DIR__ . '/../configs/db.php'; 
+
+// Start session at the top
+session_start(); 
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -28,19 +32,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // Verify password
         if (password_verify($password, $user['password'])) {
-            // Start the session and store user data
-            session_start();
-            $_SESSION['user_id'] = $user['id'];  // Assuming 'id' is the unique identifier
-            $_SESSION['user_name'] = $user['fname'];  // Store username (or fullname)
-            $_SESSION['role'] = $user['role'];  // Store role (student/teacher)
+            // Regenerate session ID for security
+            session_regenerate_id(true);
+
+            // Store user data in session
+            $_SESSION['id'] = $user['id'];        // Unique user ID
+            $_SESSION['fname'] = $user['fname'];  // User's first name
+            $_SESSION['role'] = $user['role'];    // Role (teacher/student)
 
             // Role-based redirection
             if ($user['role'] == 'teacher') {
-                // Redirect to teacher's dashboard
-                header("Location: teacher_dashboard.php");
+                header("Location: teacher_dashboard.php");  // Redirect to teacher's dashboard
             } else {
-                // Redirect to student's dashboard
-                header("Location: student_dashboard.php");
+                header("Location: student_dashboard.php");  // Redirect to student's dashboard
             }
             exit;
         } else {
@@ -95,4 +99,3 @@ ob_end_flush();
     </div>
 </body>
 </html>
-
