@@ -4,6 +4,8 @@ ob_start();
 
 require_once __DIR__ . '/../configs/db.php'; // Include database connection
 
+$email_error = '';  // Initialize an empty string for error messages
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Capture form data
     $name = trim($_POST['name']);
@@ -28,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        die("This email is already registered.");
+        $email_error = "Email is already taken.";  // Set the error message
     }
 
     // Check if username already exists
@@ -41,23 +43,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("This Full name is already taken. Please choose another one.");
     }
 
-    // Hash the password
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    // If no email error, proceed with registration
+    if (!$email_error) {
+        // Hash the password
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert the user into the database
-    $insert_sql = "INSERT INTO users (fname, email, password, role) VALUES (:fname, :email, :password, :role)";
-    $stmt = $pdo->prepare($insert_sql);
-    $stmt->bindParam(':fname', $name);
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':password', $hashed_password);
-    $stmt->bindParam(':role', $role);
+        // Insert the user into the database
+        $insert_sql = "INSERT INTO users (fname, email, password, role) VALUES (:fname, :email, :password, :role)";
+        $stmt = $pdo->prepare($insert_sql);
+        $stmt->bindParam(':fname', $name);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':password', $hashed_password);
+        $stmt->bindParam(':role', $role);
 
-    if ($stmt->execute()) {
-        // Redirect after successful registration
-        header("Location: login.php");
-        exit;
-    } else {
-        die("Error during registration.");
+        if ($stmt->execute()) {
+            // Redirect after successful registration
+            header("Location: login.php");
+            exit;
+        } else {
+            die("Error during registration.");
+        }
     }
 }
 
@@ -67,13 +72,13 @@ ob_end_flush();
 
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
+    <link rel="icon" href="images/AW-Favicon.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>Register</title>
     <style>
@@ -98,8 +103,11 @@ ob_end_flush();
                 <label for="email">Email</label>
                 <div class="icon-container">
                     <i class="fa fa-envelope"></i>
-                    <input type="email" name="email" id="email" placeholder="Enter your email" required>
+                    <input type="email" name="email" id="email" placeholder="Enter your email" value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
                 </div>
+                <?php if (!empty($email_error)): ?>
+                    <span class="error"><?php echo $email_error; ?></span>
+                <?php endif; ?>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>

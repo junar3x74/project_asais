@@ -15,7 +15,7 @@ session_start();  // Start the session
 
 // Ensure the user is logged in and is a teacher
 if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'teacher') {
-    header('Location: login.php');  // Redirect to login if not logged in or not a teacher
+    header('Location: logout.php');  // Redirect to login if not logged in or not a teacher
     exit();
 }
 
@@ -68,6 +68,7 @@ if (isset($_GET['student_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="ass.css"> <!-- Ensure this is the correct path -->
+    <link rel="icon" href="images/AW-Favicon.png" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <title>Student List</title>
 </head>
@@ -78,7 +79,7 @@ if (isset($_GET['student_id'])) {
             <li><a href="teacher_dashboard.php">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li><a href="login.php" class="logout">Logout</a></li>
+            <li><a href="logout.php" class="logout">Logout</a></li>
         </ul>
     </nav>
 

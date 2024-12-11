@@ -7,7 +7,7 @@ session_start();
 
 // Ensure the user is logged in and is a teacher
 if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'teacher') {
-    header('Location: login.php');  // Redirect to login if not logged in or not a teacher
+    header('Location: logout.php');  // Redirect to login if not logged in or not a teacher
     exit();
 }
 
@@ -77,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['grade'], $_POST['feedb
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Submissions</title>
+    <link rel="icon" href="images/AW-Favicon.png" type="image/png">
     <link rel="stylesheet" href="ass.css"> <!-- Link to the external CSS file -->
 </head>
 <body>
@@ -87,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['grade'], $_POST['feedb
             <li><a href="teacher_dashboard.php">Home</a></li>
             <li><a href="make_assignments.php">Assignments</a></li>
             <li><a href="student_list.php">Students</a></li>
-            <li><a href="login.php" class="logout">Logout</a></li>
+            <li><a href="logout.php" class="logout">Logout</a></li>
         </ul>
     </nav>
 

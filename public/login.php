@@ -6,7 +6,22 @@ ob_start();
 require_once __DIR__ . '/../configs/db.php'; 
 
 // Start session at the top
-session_start(); 
+session_start();
+
+// Prevent caching of the page
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+// Redirect logged-in users to their respective dashboard
+if (isset($_SESSION['id'])) {
+    if ($_SESSION['role'] == 'teacher') {
+        header("Location: teacher_dashboard.php"); // Redirect if logged in as teacher
+    } else {
+        header("Location: student_dashboard.php"); // Redirect if logged in as student
+    }
+    exit();
+}
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -68,6 +83,7 @@ ob_end_flush();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="main.css">
+    <link rel="icon" href="images/AW-Favicon.png" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>

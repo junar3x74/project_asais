@@ -7,7 +7,7 @@ session_start();
 
 // Ensure the user is logged in and is a student
 if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'student') {
-    header('Location: login.php');  // Redirect to login if not logged in or not a student
+    header('Location: logout.php');  // Redirect to login if not logged in or not a student
     exit();
 }
 
