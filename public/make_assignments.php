@@ -113,7 +113,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
     <ul>
       <li><a href="teacher_dashboard.php">Home</a></li>
       <li><a href="about_us.php">About</a></li>
-      <li><a href="#contact">Contact</a></li>
       <li><a href="logout.php" class="logout">Logout</a></li>
     </ul>
   </nav>
