@@ -65,7 +65,7 @@ try {
     <ul>
       <li><a href="teacher_dashboard.php">Home</a></li>
       <li><a href="about_us.php">About</a></li>
-      <li><a href="#contact">Contact</a></li>
+      
       <li><a href="logout.php" class="logout">Logout</a></li>
     </ul>
   </nav>
