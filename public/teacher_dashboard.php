@@ -64,7 +64,7 @@ try {
     </div>
     <ul>
       <li><a href="teacher_dashboard.php">Home</a></li>
-      <li><a href="#about">About</a></li>
+      <li><a href="about_us.php">About</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><a href="logout.php" class="logout">Logout</a></li>
     </ul>
@@ -80,7 +80,7 @@ try {
       <li><a href="make_assignments.php">Assignments</a></li>
       <li><a href="student_list.php">Students</a></li>
       <li><a href= "submissions.php">Student Submissions</a></li>
-      <li><a href="#about">About Us</a></li>
+      <li><a href="about_us.php">About Us</a></li>
     </ul>
   </div>
 

@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
   <nav class="navbar">
     <ul>
       <li><a href="teacher_dashboard.php">Home</a></li>
-      <li><a href="#about">About</a></li>
+      <li><a href="about_us.php">About</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><a href="logout.php" class="logout">Logout</a></li>
     </ul>
@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
       <li><a href="make_assignments.php">Assignments</a></li>
       <li><a href="student_list.php">Students</a></li>
       <li><a href= "submissions.php">Student Submissions</a></li>
-      <li><a href="#about">About Us</a></li>
+      <li><a href="about_us.php">About Us</a></li>
     </ul>
   </div>
 

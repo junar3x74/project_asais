@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['grade'], $_POST['feedb
             <li><a href="make_assignments.php">Assignments</a></li>
             <li><a href="student_list.php">Students</a></li>
             <li><a href="submissions.php">Student Submissions</a></li>
-            <li><a href="#about us">About Us</a></li>
+            <li><a href="about_us.php us">About Us</a></li>
         </ul>
     </div>
 
