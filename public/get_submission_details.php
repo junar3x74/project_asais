@@ -2,10 +2,20 @@
 // Include database connection
 require_once '../configs/db.php'; // Adjust the path as needed
 
-// Get submission ID from the query string
+// Start session
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'student') {
+    // Redirect to login page if not logged in or not a student
+    header("Location: login.php");
+    exit();
+}
+
+// Get submission ID from the query string and validate it
 $submission_id = isset($_GET['id']) ? $_GET['id'] : null;
 
-if ($submission_id) {
+if ($submission_id && is_numeric($submission_id)) {  // Check if the ID is numeric
     try {
         // Fetch the details of the submission
         $query = "
@@ -19,12 +29,16 @@ if ($submission_id) {
         $stmt->execute(['submission_id' => $submission_id]);
         $submission = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Return the submission details as JSON
-        echo json_encode($submission);
+        // Check if the submission exists and return it as JSON
+        if ($submission) {
+            echo json_encode($submission);
+        } else {
+            echo json_encode(['error' => 'No submission found with the provided ID']);
+        }
     } catch (PDOException $e) {
         echo json_encode(['error' => 'Database query failed: ' . $e->getMessage()]);
     }
 } else {
-    echo json_encode(['error' => 'Submission ID is missing']);
+    echo json_encode(['error' => 'Invalid or missing submission ID']);
 }
 ?>

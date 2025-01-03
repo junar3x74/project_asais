@@ -65,10 +65,10 @@ try {
       <!-- Placeholder for profile picture if needed -->
     </div>
     <ul>
-      <li><a href="student_dashboard.php">Home</a></li>
-      <li><a href="about_us.php">About</a></li>
-      
-      <li><a href="logout.php" class="logout">Logout</a></li>
+            <li><a href="student_dashboard.php">Home</a></li>
+            <li><a href="view_assignments.php">Assignments</a></li>
+            <li><a href="submitted.php">Submissions</a></li>
+            <li><a href="logout.php" class="logout">Logout</a></li>
     </ul>
   </nav>
 

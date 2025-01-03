@@ -47,7 +47,8 @@ try {
     <nav class="navbar">
         <ul>
             <li><a href="student_dashboard.php">Home</a></li>
-            <li><a href="submitted.php">My Submissions</a></li>
+            <li><a href="view_assignments.php">Assignments</a></li>
+            <li><a href="submitted.php">Submissions</a></li>
             <li><a href="logout.php" class="logout">Logout</a></li>
         </ul>
     </nav>

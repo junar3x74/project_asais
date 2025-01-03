@@ -1,3 +1,17 @@
+<?php
+require_once '../configs/db.php';
+
+// Start session
+session_start();
+
+// Check if the user is logged in and is either a teacher or student
+if (!isset($_SESSION['id']) || ($_SESSION['role'] !== 'teacher' && $_SESSION['role'] !== 'student')) {
+    // Redirect to login page if not logged in or not a teacher/student
+    header("Location: login.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
