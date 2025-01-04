@@ -1,19 +1,14 @@
 <?php
-// Include database connection
-require_once '../configs/db.php'; // Adjust the path as needed
-
-// Start session
+require_once '../configs/db.php';
 session_start();
 
-// Ensure the user is logged in and is a teacher
 if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'teacher') {
-    header('Location: logout.php');  // Redirect to login if not logged in or not a teacher
+    header('Location: logout.php');  
     exit();
 }
 
-$teacher_id = $_SESSION['id'];  // Use 'id' instead of 'user_id'
+$teacher_id = $_SESSION['id'];
 
-// Fetch all assignments for the teacher
 $assignments = [];
 try {
     $assignmentQuery = "SELECT * FROM assignments WHERE teacher_id = :teacher_id";
@@ -24,7 +19,6 @@ try {
     die("Database query failed: " . $e->getMessage());
 }
 
-// Handle form submission to create a new assignment
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title'], $_POST['description'], $_POST['due_date'])) {
     $title = $_POST['title'];
     $description = $_POST['description'];
@@ -42,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title'], $_POST['descr
             'due_date' => $due_date
         ]);
 
-        // Redirect after successful insert
+        $_SESSION['success'] = 'Assignment created successfully!';
         header('Location: make_assignments.php');
         exit();
     } catch (PDOException $e) {
@@ -50,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title'], $_POST['descr
     }
 }
 
-// Handle assignment deletion
 if (isset($_GET['delete_id'])) {
     $delete_id = $_GET['delete_id'];
 
@@ -59,7 +52,6 @@ if (isset($_GET['delete_id'])) {
         $stmt = $pdo->prepare($deleteQuery);
         $stmt->execute(['id' => $delete_id, 'teacher_id' => $teacher_id]);
 
-        // Redirect after successful delete
         header('Location: make_assignments.php');
         exit();
     } catch (PDOException $e) {
@@ -67,7 +59,6 @@ if (isset($_GET['delete_id'])) {
     }
 }
 
-// Handle form submission to update an assignment
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edit_title'], $_POST['edit_description'], $_POST['edit_due_date'])) {
     $edit_id = $_POST['edit_id'];
     $edit_title = $_POST['edit_title'];
@@ -87,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
             'teacher_id' => $teacher_id
         ]);
 
-        // Redirect after successful update
         header('Location: make_assignments.php');
         exit();
     } catch (PDOException $e) {
@@ -102,13 +92,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Assignments</title>
-    <link rel="stylesheet" href="ass.css"> <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="ass.css">
     <link rel="icon" href="images/AW-Favicon.png" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .success-message {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .success-message.hide {
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Navbar -->
   <nav class="navbar">
     <ul>
       <li><a href="teacher_dashboard.php">Home</a></li>
@@ -117,7 +134,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
     </ul>
   </nav>
 
-  <!-- Sidebar -->
   <div class="sidebar">
     <div class="profile">
       <h3 class="username"><?php echo isset($_SESSION['fname']) ? $_SESSION['fname'] : 'User'; ?></h3>
@@ -131,11 +147,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
     </ul>
   </div>
 
-  <!-- Content -->
   <div class="content">
     <h1>Assignments</h1>
 
-    <!-- Add Assignment Form -->
+    <?php if (isset($_SESSION['success'])): ?>
+        <div id="success-message" class="success-message show">
+            <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
+        </div>
+    <?php endif; ?>
+
     <h2>Create a New Assignment</h2>
     <form method="POST" action="make_assignments.php">
       <label for="title">Assignment Title:</label>
@@ -150,7 +170,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
       <button type="submit">Create Assignment</button>
     </form>
 
-    <!-- List of Current Assignments -->
     <h2>Current Assignments</h2>
     <table class="assignments-table">
         <thead>
@@ -168,17 +187,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
                     <td><?php echo htmlspecialchars($assignment['description']); ?></td>
                     <td><?php echo htmlspecialchars($assignment['due_date']); ?></td>
                     <td>
-    <!-- Edit and Delete Buttons Inline -->
                     <a href="make_assignments.php?edit_id=<?php echo $assignment['id']; ?>" class="action-btn edit-btn">Edit</a>
                     <a href="make_assignments.php?delete_id=<?php echo $assignment['id']; ?>" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this assignment?')">Delete</a>
                     </td>
-
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
 
-    <!-- Edit Assignment Form (only visible when editing) -->
     <?php if (isset($_GET['edit_id'])): 
         $edit_id = $_GET['edit_id'];
         $stmt = $pdo->prepare("SELECT * FROM assignments WHERE id = :id AND teacher_id = :teacher_id");
@@ -202,6 +218,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
     </form>
     <?php endif; endif; ?>
   </div>
+
+  <script>
+    window.onload = function() {
+        const successMessage = document.getElementById('success-message');
+        if (successMessage) {
+            setTimeout(function() {
+                successMessage.classList.remove('show');
+                successMessage.classList.add('hide');
+            }, 3000);
+        }
+    }
+  </script>
 
 </body>
 </html>

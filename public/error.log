@@ -1,2 +1,11 @@
 [11-Dec-2024 11:52:06 Europe/Berlin] Mailer Error: SMTP Error: Could not authenticate.
 [11-Dec-2024 12:02:12 Europe/Berlin] Mailer Error: SMTP Error: Could not authenticate.
+[04-Jan-2025 07:00:23 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\project_asais\public\reset_password.php on line 23
+[04-Jan-2025 07:04:04 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\project_asais\public\reset_password.php on line 21
+[04-Jan-2025 07:04:39 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\project_asais\public\reset_password.php on line 21
+[04-Jan-2025 07:07:12 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\project_asais\public\reset_password.php on line 18
+[04-Jan-2025 07:08:40 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\project_asais\public\reset_password.php on line 18
+[04-Jan-2025 07:09:42 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\project_asais\public\reset_password.php on line 18
+[04-Jan-2025 07:09:57 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\project_asais\public\reset_password.php on line 18
+[04-Jan-2025 07:12:06 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\project_asais\public\reset_password.php on line 18
+[04-Jan-2025 07:12:26 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\project_asais\public\reset_password.php on line 18
