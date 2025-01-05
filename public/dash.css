@@ -181,3 +181,52 @@ table td button:hover {
   background-color: #c0392b;
 }
 
+.section {
+  margin-top: 40px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+#teachers-section h2, #students-section h2 {
+  font-size: 2rem;
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+#teachers-section ul, #students-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#teachers-section li, #students-section li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+#teachers-section li:hover, #students-section li:hover {
+  background-color: #e6f7ff;
+}
+
+#teachers-section a, #students-section a {
+  color: #d9534f;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+#teachers-section a:hover, #students-section a:hover {
+  color: #c9302c;
+}
+
+.fas.fa-trash-alt {
+  margin-left: 10px;
+}

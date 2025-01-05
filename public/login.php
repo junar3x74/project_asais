@@ -7,11 +7,14 @@ header("Pragma: no-cache");
 header("Expires: 0");
 
 if (isset($_SESSION['id'])) {
-    if ($_SESSION['role'] == 'teacher') {
+    if ($_SESSION['role'] == 'admin') {
+        header("Location: admin_dashboard.php"); 
+    } elseif ($_SESSION['role'] == 'teacher') {
         header("Location: teacher_dashboard.php");
     } else {
         header("Location: student_dashboard.php");
     }
+
     exit();
 }
 
@@ -36,7 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['fname'] = $user['fname'];
                 $_SESSION['role'] = $user['role'];
 
-                if ($user['role'] == 'teacher') {
+                if ($user['role'] == 'admin') {
+                    header("Location: admin_dashboard.php"); // Redirect to the admin dashboard
+                } elseif ($user['role'] == 'teacher') {
                     header("Location: teacher_dashboard.php");
                 } else {
                     header("Location: student_dashboard.php");

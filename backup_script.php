@@ -3,6 +3,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(__DIR__);
@@ -27,11 +28,13 @@ if (!is_dir($backupFolder)) {
 
 $files = glob($backupFolder . '/*.xlsx');
 $latestBackup = 0;
+$existingBackupFile = null;
 
 foreach ($files as $file) {
     $fileTime = filemtime($file);
     if ($fileTime > $latestBackup) {
         $latestBackup = $fileTime;
+        $existingBackupFile = $file;
     }
 }
 
@@ -39,17 +42,21 @@ $oneWeekInSeconds = 7 * 24 * 60 * 60;
 $now = time();
 
 if ($now - $latestBackup < $oneWeekInSeconds) {
-    echo "Backup already performed within the last week. No new backup created.\n";
-    exit;
+    echo "Backup already performed within the last week. Updating the existing backup...\n";
+    
+    $spreadsheet = IOFactory::load($existingBackupFile);
+    $sheet = $spreadsheet->getActiveSheet();
+    $currentRow = $sheet->getHighestRow() + 1; 
+} else {
+ 
+    echo "Creating a new backup...\n";
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+    $currentRow = 1;
 }
-
-$spreadsheet = new Spreadsheet();
-$sheet = $spreadsheet->getActiveSheet();
 
 try {
     $tables = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
-
-    $currentRow = 1;
 
     foreach ($tables as $table) {
         $data = $pdo->query("SELECT * FROM $table")->fetchAll(PDO::FETCH_ASSOC);
@@ -86,10 +93,15 @@ try {
 }
 
 $backupFile = $backupFolder . '/backup_' . date('Y-m-d_H-i-s') . '.xlsx';
+if ($existingBackupFile) {
+ 
+    $backupFile = $existingBackupFile;
+}
+
 $writer = new Xlsx($spreadsheet);
 $writer->save($backupFile);
 
-echo "Weekly backup successful! File: $backupFile\n";
+echo "Backup (or update) successful! File: $backupFile\n";
 
 $retentionPeriod = (int)$_ENV['BACKUP_RETENTION_DAYS'] * 24 * 60 * 60;
 $files = glob($backupFolder . '/*.xlsx');
