@@ -1,6 +1,5 @@
 <?php
-
-require_once '../configs/db.php'; 
+require_once '../configs/db.php';
 
 session_set_cookie_params([
     'lifetime' => 86400,
@@ -134,11 +133,14 @@ if (isset($_GET['student_id'])) {
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     var responseText = xhr.responseText.trim();
+                    var submissionsContainer = document.getElementById('submissionsContainer');
+                    
                     if (responseText === "") {
-                        document.getElementById('submissionsContainer').innerHTML = "<p>No submissions found for this student.</p>";
+                        submissionsContainer.innerHTML = "<p>No submissions found for this student.</p>";
                     } else {
-                        document.getElementById('submissionsContainer').innerHTML = '<ul>' + responseText + '</ul>';
+                        submissionsContainer.innerHTML = '<ul>' + responseText + '</ul>';
                     }
+                    
                     document.getElementById('submissionModal').style.display = 'block';
                 } else {
                     alert("Failed to load submissions.");
