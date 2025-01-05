@@ -1,20 +1,20 @@
 <?php
-// Include database connection
-require_once '../configs/db.php'; // Adjust the path as needed
 
-// Start session
+require_once '../configs/db.php'; 
+
+
 session_start();
 
-// Ensure the user is logged in and is a student
+
 if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'student') {
-    header('Location: logout.php');  // Redirect to login if not logged in or not a student
+    header('Location: logout.php');  
     exit();
 }
 
-// Get the student's ID
+
 $student_id = $_SESSION['id'];
 
-// Fetch all assignments with teacher information
+
 $assignments = [];
 try {
     $assignmentQuery = "
@@ -38,11 +38,11 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Assignments</title>
     <link rel="icon" href="images/AW-Favicon.png" type="image/png">
-    <link rel="stylesheet" href="ass.css"> <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="ass.css"> 
 </head>
 <body>
 
-    <!-- Navbar -->
+    
     <nav class="navbar">
         <ul>
             <li><a href="student_dashboard.php">Home</a></li>
@@ -52,7 +52,7 @@ try {
         </ul>
     </nav>
 
-    <!-- Sidebar -->
+
     <div class="sidebar">
         <div class="profile">
             <h3 class="username"><?php echo isset($_SESSION['fname']) ? $_SESSION['fname'] : 'User'; ?></h3>
@@ -66,11 +66,11 @@ try {
         </ul>
     </div>
 
-    <!-- Content -->
+    
     <div class="content">
         <h1>Assignments</h1>
 
-        <!-- List of Assignments -->
+    
         <table class="assignments-table">
             <thead>
                 <tr>
@@ -89,7 +89,7 @@ try {
                         <td><?php echo htmlspecialchars($assignment['teacher_name']); ?></td>
                         <td><?php echo htmlspecialchars($assignment['due_date']); ?></td>
                         <td>
-                            <!-- Button to view more details or download -->
+                        
                             <a href="view_assignment_details.php?assignment_id=<?php echo $assignment['assignment_id']; ?>">View Details</a>
                         </td>
                     </tr>

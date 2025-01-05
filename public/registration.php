@@ -1,20 +1,18 @@
 <?php
-// Start output buffering
+
 ob_start();
 
-require_once __DIR__ . '/../configs/db.php'; // Include database connection
+require_once __DIR__ . '/../configs/db.php'; 
 
-$email_error = '';  // Initialize an empty string for error messages
+$email_error = '';  
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Capture form data
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $password = $_POST['password'];
     $cpassword = $_POST['cpassword'];
     $role = $_POST['role'];
 
-    // Validate form inputs
     if (empty($name) || empty($email) || empty($password) || empty($cpassword)) {
         die("All fields are required.");
     }
@@ -23,17 +21,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Passwords do not match.");
     }
 
-    // Check if email is already registered
     $check_email_sql = "SELECT * FROM users WHERE email = :email";
     $stmt = $pdo->prepare($check_email_sql);
     $stmt->bindParam(':email', $email);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        $email_error = "Email is already taken.";  // Set the error message
+        $email_error = "Email is already taken.";
     }
 
-    // Check if username already exists
     $check_username_sql = "SELECT * FROM users WHERE fname = :fname";
     $stmt = $pdo->prepare($check_username_sql);
     $stmt->bindParam(':fname', $name);
@@ -43,12 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("This Full name is already taken. Please choose another one.");
     }
 
-    // If no email error, proceed with registration
     if (!$email_error) {
-        // Hash the password
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // Insert the user into the database
         $insert_sql = "INSERT INTO users (fname, email, password, role) VALUES (:fname, :email, :password, :role)";
         $stmt = $pdo->prepare($insert_sql);
         $stmt->bindParam(':fname', $name);
@@ -57,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':role', $role);
 
         if ($stmt->execute()) {
-            // Redirect after successful registration
             header("Location: login.php");
             exit;
         } else {
@@ -66,11 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// End output buffering and flush output
 ob_end_flush();
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -114,7 +103,7 @@ ob_end_flush();
                 <div class="icon-container">
                     <i class="fa fa-lock"></i>
                     <input type="password" name="password" id="password" placeholder="Enter your password" required>
-                    <span id="password-error" class="error"></span> <!-- Error message for password -->
+                    <span id="password-error" class="error"></span>
                 </div>
             </div>
             <div class="form-group">
@@ -122,7 +111,7 @@ ob_end_flush();
                 <div class="icon-container">
                     <i class="fa fa-lock"></i>
                     <input type="password" name="cpassword" id="cpassword" placeholder="Confirm your password" required>
-                    <span id="cpassword-error" class="error"></span> <!-- Error message for confirm password -->
+                    <span id="cpassword-error" class="error"></span>
                 </div>
             </div>
             <div class="form-group">
@@ -143,15 +132,12 @@ ob_end_flush();
     </div>
 
     <script>
-        // Password validation function
         function validatePassword(password) {
-            // Regular expressions for password rules
-            const minLength = 8; // Minimum length
-            const uppercasePattern = /[A-Z]/; // At least one uppercase letter
-            const specialCharPattern = /[!@#$%^&*(),.?":{}|<>]/; // At least one special character
-            const numberPattern = /[0-9]/; // At least one number
+            const minLength = 8;
+            const uppercasePattern = /[A-Z]/;
+            const specialCharPattern = /[!@#$%^&*(),.?":{}|<>]/;
+            const numberPattern = /[0-9]/;
 
-            // Validate the password based on the patterns
             if (password.length < minLength) {
                 return "Password must be at least 8 characters long.";
             }
@@ -165,13 +151,11 @@ ob_end_flush();
                 return "Password must contain at least one number.";
             }
 
-            // If all validations pass
             return null;
         }
 
-        // Event listener for form submission
         document.getElementById('form').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent form submission
+            e.preventDefault();
 
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('cpassword').value;
@@ -181,37 +165,26 @@ ob_end_flush();
             const passwordErrorElement = document.getElementById('password-error');
             const confirmPasswordErrorElement = document.getElementById('cpassword-error');
 
-            // Reset previous error messages
             passwordErrorElement.textContent = '';
             confirmPasswordErrorElement.textContent = '';
 
             let isValid = true;
 
-            // Show password validation error if any
             if (passwordError) {
                 passwordErrorElement.textContent = passwordError;
                 isValid = false;
             }
 
-            // Show confirm password error if any
             if (confirmPasswordError) {
                 confirmPasswordErrorElement.textContent = confirmPasswordError;
                 isValid = false;
             }
 
-            // If the form is valid, submit it
             if (isValid) {
-                // Optionally, display a success prompt before submitting
                 alert("Form is valid. Submitting the form!");
-                this.submit(); // This will submit the form to the same page (or action specified in the form)
+                this.submit();
             }
-            
         });
     </script>
 </body>
 </html>
-
-
-
-
-

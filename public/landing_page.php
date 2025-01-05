@@ -6,7 +6,7 @@
     <link rel="icon" href="images/AW-Favicon.png" type="image/png">
     <title>Welcome to Assignment Management Platform</title>
     <style>
-        /* Body and basic layout */
+        
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -15,7 +15,7 @@
             color: #333;
         }
 
-        /* Centered container */
+        
         .welcome-container {
             display: flex;
             flex-direction: column;
@@ -39,7 +39,7 @@
             animation: fadeIn 1.5s ease-out;
         }
 
-        /* Header Style */
+        
         h1 {
             font-size: 3rem;
             margin-bottom: 20px;
@@ -47,14 +47,14 @@
             letter-spacing: 1px;
         }
 
-        /* Paragraph style */
+        
         p {
             font-size: 1.4rem;
             margin-bottom: 25px;
             line-height: 1.6;
         }
 
-        /* Description box styling */
+        
         .description-box {
             background-color: #ffffff;
             padding: 25px;
@@ -79,7 +79,6 @@
             line-height: 1.8;
         }
 
-        /* Get Started Button styling */
         .get-started-btn {
             padding: 15px 30px;
             background-color: #28a745;
@@ -97,7 +96,7 @@
             background-color: #218838;
         }
 
-        /* Responsive design for mobile */
+        
         @media (max-width: 768px) {
             .welcome-message {
                 padding: 20px;
@@ -121,7 +120,7 @@
             }
         }
 
-        /* Fade-in animation */
+        
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -140,14 +139,14 @@
             <h1>Welcome to Our Assignment Management Platform</h1>
             <p>A simple and secure platform to help manage assignments and activities. It offers an easy-to-use interface for both professors and students, making it simple to create, submit, and assign deadlines to activities.</p>
             
-            <!-- Description Section -->
+        
             <div class="description-box">
                 <h2>About the Platform</h2>
                 <p>The platform ensures that information is kept safe through strong security measures, including encryption and access control. It also sends real-time notifications and updates to both students and professors to keep everyone on track.</p>
                 <p>Whether you're a professor assigning tasks or a student submitting them, this platform helps make the process smoother and more efficient. The system is designed to offer the best experience for both students and educators.</p>
             </div>
             
-            <!-- Get Started Button -->
+        
             <a href="login.php" class="get-started-btn">Get Started</a>
         </div>
     </div>

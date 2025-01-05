@@ -1,75 +1,67 @@
 <?php
-// Enable error reporting for debugging
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/error.log');
 
-require_once __DIR__ . '/../configs/db.php'; // Database connection
-require_once __DIR__ . '/../vendor/autoload.php'; // PHPMailer and Carbon
+require_once __DIR__ . '/../configs/db.php'; 
+require_once __DIR__ . '/../vendor/autoload.php'; 
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Dotenv\Dotenv;
 use Carbon\Carbon;
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../'); // Adjust path if needed
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../'); 
 $dotenv->load();
 
 session_start();
 
-// Check if the form is submitted
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
 
-    // Validate email input
+    
     if (empty($email)) {
         $_SESSION['error'] = "Please enter your email address.";
         header('Location: forgot_password.php');
         exit;
     }
 
-    // Check if the email exists in the database
+    
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
     $stmt->execute(['email' => $email]);
     $user = $stmt->fetch();
 
     if ($user) {
-        // Generate a 6-digit OTP and set expiry in Philippine Time
         $otp = random_int(100000, 999999);
-        $otp_expiry = Carbon::now('Asia/Manila')->addMinutes(10)->format('Y-m-d H:i:s');
-
-        // Update OTP and expiry in the database
+        $otp_expiry = Carbon::now('Asia/Manila')->addMinutes(10)->format('Y-m-d H:i:s'); 
         $updateStmt = $pdo->prepare("UPDATE users SET otp = :otp, otp_expiry = :otp_expiry WHERE email = :email");
-        if ($updateStmt->execute(['otp' => $otp, 'otp_expiry' => $otp_expiry, 'email' => $email])) {
-            // Attempt to send the OTP email
+        if ($updateStmt->execute(['otp' => $otp, 'otp_expiry' => $otp_expiry, 'email' => $email])) {    
             $mail = new PHPMailer(true);
             try {
-                // Email server settings
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
-                $mail->Username = $_ENV['EMAIL_USERNAME']; // Gmail address
-                $mail->Password = $_ENV['EMAIL_PASSWORD']; // App password
+                $mail->Username = $_ENV['EMAIL_USERNAME']; 
+                $mail->Password = $_ENV['EMAIL_PASSWORD']; 
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = 587;
 
-                // Email content
+                
                 $mail->setFrom($_ENV['EMAIL_USERNAME'], 'Password Reset');
                 $mail->addAddress($email);
                 $mail->isHTML(true);
                 $mail->Subject = 'Your OTP for Password Reset';
                 $mail->Body = "<p>Your OTP is <strong>{$otp}</strong>.</p><p>This OTP will expire in 10 minutes.</p>";
 
-                // Send the email
+            
                 $mail->send();
-
-                // Set success message and redirect
                 $_SESSION['success'] = "An OTP has been sent to your email.";
                 header('Location: reset_password.php');
                 exit;
             } catch (Exception $e) {
-                // Log email error and set session message
                 error_log("Mailer Error: " . $mail->ErrorInfo);
                 $_SESSION['error'] = "Failed to send OTP email. Please try again.";
             }
@@ -80,7 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['error'] = "No account found with this email.";
     }
 
-    // Redirect back to the forgot password page with an error
     header('Location: forgot_password.php');
     exit;
 }

@@ -1,20 +1,13 @@
 <?php
-// Include database connection
-require_once '../configs/db.php'; // Adjust the path as needed
-
-// Start session
+require_once '../configs/db.php';
 session_start();
 
-// Ensure the user is logged in and is a teacher
 if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'teacher') {
-    header('Location: logout.php');  // Redirect to login if not logged in or not a teacher
+    header('Location: logout.php');
     exit();
 }
 
-// Get the teacher's ID
 $teacher_id = $_SESSION['id'];
-
-// Fetch all assignments for the teacher
 $assignments = [];
 try {
     $assignmentQuery = "SELECT * FROM assignments WHERE teacher_id = :teacher_id";
@@ -25,7 +18,6 @@ try {
     die("Database query failed: " . $e->getMessage());
 }
 
-// Fetch submission data for each assignment and student
 $submissions = [];
 try {
     $submissionQuery = "
@@ -42,14 +34,12 @@ try {
     die("Database query failed: " . $e->getMessage());
 }
 
-// Handle grading and feedback submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['grade'], $_POST['feedback'], $_POST['submission_id'])) {
     $grade = $_POST['grade'];
     $feedback = $_POST['feedback'];
     $submission_id = $_POST['submission_id'];
 
     try {
-        // Update the submission with grade and feedback
         $updateQuery = "
             UPDATE submissions 
             SET grade = :grade, feedback = :feedback, status = 'graded' 
@@ -61,14 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['grade'], $_POST['feedb
             'submission_id' => $submission_id
         ]);
 
-        // Redirect to refresh the page
         header('Location: submissions.php');
         exit();
     } catch (PDOException $e) {
         die("Database query failed: " . $e->getMessage());
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -78,11 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['grade'], $_POST['feedb
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Submissions</title>
     <link rel="icon" href="images/AW-Favicon.png" type="image/png">
-    <link rel="stylesheet" href="ass.css"> <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="ass.css">
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar">
         <ul>
             <li><a href="teacher_dashboard.php">Home</a></li>
@@ -92,7 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['grade'], $_POST['feedb
         </ul>
     </nav>
 
-    <!-- Sidebar -->
     <div class="sidebar">
         <div class="profile">
             <h3 class="username"><?php echo isset($_SESSION['fname']) ? $_SESSION['fname'] : 'User'; ?></h3>
@@ -106,11 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['grade'], $_POST['feedb
         </ul>
     </div>
 
-    <!-- Content -->
     <div class="content">
         <h1>Student Submissions</h1>
-
-        <!-- Submissions List -->
         <table class="submissions-table">
             <thead>
                 <tr>
@@ -136,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['grade'], $_POST['feedb
                                 <br>
                                 <?php echo htmlspecialchars($submission['feedback']); ?>
                             <?php else: ?>
-                                <!-- Form to input grade and feedback -->
                                 <form method="POST" action="submissions.php">
                                     <input type="number" name="grade" placeholder="Grade" required>
                                     <textarea name="feedback" placeholder="Feedback" required></textarea>
@@ -146,39 +128,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['grade'], $_POST['feedb
                             <?php endif; ?>
                         </td>
                         <td>
-                            <!-- Display the submission content -->
                             <pre><?php echo htmlspecialchars($submission['content']); ?></pre>
                         </td>
                         <td>
-                            <!-- View Details Button -->
                             <button onclick="viewDetails(<?php echo $submission['id']; ?>)">View Details</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
-
     </div>
 
-    <!-- Modal for Viewing Details -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <h2>Submission Details</h2>
-            <div id="modal-body">
-                <!-- Content will be dynamically added via JavaScript -->
-            </div>
+            <div id="modal-body"></div>
         </div>
     </div>
 
     <script>
-    // Function to open the modal and show submission details
     function viewDetails(submissionId) {
-        // Fetch the details of the submission from the server via AJAX
         fetch('get_submission_details.php?id=' + submissionId)
             .then(response => response.json())
             .then(data => {
-                // Display the submission details in the modal
                 const modalBody = document.getElementById('modal-body');
                 modalBody.innerHTML = `
                     <p><strong>Student Name:</strong> ${data.student_name}</p>
@@ -189,22 +162,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['grade'], $_POST['feedb
                     <p><strong>Feedback:</strong> ${data.feedback}</p>
                     <p><strong>Submission Content:</strong> <pre>${data.content}</pre></p>
                 `;
-                // Open the modal
                 document.getElementById('modal').style.display = 'block';
             })
             .catch(error => console.error('Error fetching submission details:', error));
     }
 
-    // Function to close the modal
     function closeModal() {
         document.getElementById('modal').style.display = 'none';
     }
 
-    // Ensure the modal is closed on page load (in case of refresh)
     window.onload = function() {
         document.getElementById('modal').style.display = 'none';
     }
-</script>
+    </script>
 
 </body>
 </html>
