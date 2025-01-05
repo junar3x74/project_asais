@@ -52,6 +52,7 @@ if (isset($_GET['delete_id'])) {
         $stmt = $pdo->prepare($deleteQuery);
         $stmt->execute(['id' => $delete_id, 'teacher_id' => $teacher_id]);
 
+        $_SESSION['error'] = 'Assignment deleted successfully!';
         header('Location: make_assignments.php');
         exit();
     } catch (PDOException $e) {
@@ -78,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
             'teacher_id' => $teacher_id
         ]);
 
+        $_SESSION['success'] = 'Assignment updated successfully!';
         header('Location: make_assignments.php');
         exit();
     } catch (PDOException $e) {
@@ -96,9 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
     <link rel="icon" href="images/AW-Favicon.png" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        .success-message {
-            background-color: #4CAF50;
-            color: white;
+        .message {
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
@@ -115,11 +115,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
             max-width: 400px;
         }
 
-        .success-message.hide {
+        .success {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .error {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .message.hide {
             display: none;
         }
 
-        .success-message.show {
+        .message.show {
             display: block;
         }
     </style>
@@ -142,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
     <ul>
       <li><a href="make_assignments.php">Assignments</a></li>
       <li><a href="student_list.php">Students</a></li>
-      <li><a href= "submissions.php">Student Submissions</a></li>
+      <li><a href="submissions.php">Student Submissions</a></li>
       <li><a href="about_us.php">About Us</a></li>
     </ul>
   </div>
@@ -151,8 +161,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
     <h1>Assignments</h1>
 
     <?php if (isset($_SESSION['success'])): ?>
-        <div id="success-message" class="success-message show">
+        <div id="success-message" class="message success show">
             <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['error'])): ?>
+        <div id="error-message" class="message error show">
+            <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
         </div>
     <?php endif; ?>
 
@@ -226,6 +242,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'], $_POST['edi
             setTimeout(function() {
                 successMessage.classList.remove('show');
                 successMessage.classList.add('hide');
+            }, 3000);
+        }
+
+        const errorMessage = document.getElementById('error-message');
+        if (errorMessage) {
+            setTimeout(function() {
+                errorMessage.classList.remove('show');
+                errorMessage.classList.add('hide');
             }, 3000);
         }
     }
